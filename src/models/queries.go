@@ -9,7 +9,7 @@ func GetTodos(workspaceID string, startingDate string, endingDate string) ([]Tod
 	var todos []Todo
 
 	rows, err := conn.Query(
-		"SELECT todoID, title , body , userID, workspace, createdAt FROM todos WHERE workspace = $1 AND createdAt between $2 AND $3",
+		"SELECT todoID, title, body, done, userID, workspace, createdAt FROM todos WHERE workspace = $1 AND createdAt between $2 AND $3",
 		workspaceID,
 		startingDate,
 		endingDate,
@@ -23,7 +23,7 @@ func GetTodos(workspaceID string, startingDate string, endingDate string) ([]Tod
 
 	for rows.Next() {
 		var todo Todo
-		rows.Scan(&todo.TodoID, &todo.Title, &todo.Body, &todo.UserID, &todo.WorkspaceID, &todo.CreatedAt)
+		rows.Scan(&todo.TodoID, &todo.Title, &todo.Body, &todo.Done, &todo.UserID, &todo.WorkspaceID, &todo.CreatedAt)
 
 		todos = append(todos, todo)
 	}

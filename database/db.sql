@@ -6,6 +6,7 @@ CREATE TABLE todos (
     todoID UUID PRIMARY KEY,
     title VARCHAR NOT NULL, 
     body VARCHAR NOT NULL, 
+    done BOOLEAN NOT NULL,
     userID UUID NOT NULL,
     workspaceID UUID NOT NULL,
     createdAt TIMESTAMP DEFAULT NOW() 
