@@ -16,8 +16,8 @@ def createWorkspace():
     parentWorkspace = None
 
     body = { "workspace": workspace, "parentWorkspace": parentWorkspace }
-    res = testRoute(POST, f"{config.server}/api/v1/workspaces", headers={ "X-Token": config.token }, body=body)
+    res = testRoute(POST, f"{config.workspacesService}/api/v1/workspaces", headers={ "X-Token": config.token }, body=body)
     
     workspaceID = False if "workspaceID" not in res.body else res.body["workspaceID"]
 
-    return workspace, workspaceID
+    return workspaceID

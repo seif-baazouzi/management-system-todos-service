@@ -1,2 +1,3 @@
 server = "http://127.0.0.1:3002"
-token  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZDU3MDU2ZDMtM2FjNS00ZGEzLTlmZDgtMTUyNThiZTEzMzQ5In0.CtbNOj-I-8FeNwb5vrnBoaLo3NYXM-whj-ksVdUpYgA"
+workspacesService = "http://127.0.0.1:3001"
+token  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTRiZTVmYjUtY2Y2Mi00OWJhLTljNTYtMjE4YmNlODRhNDNmIn0.G6boC3jK-_HKf6_IIFaa1CgCuZJOYAZ-DpYsZvsoJEU"

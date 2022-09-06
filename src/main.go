@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"todos-service/src/auth"
 	"todos-service/src/db"
 	"todos-service/src/handlers"
 
@@ -22,7 +23,7 @@ func main() {
 		Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
 	}))
 
-	app.Get("/api/v1/todos/today", handlers.GetTodayTodos)
+	app.Get("/api/v1/todos/:workspaceID/today", auth.IsWorkspaceOwner, handlers.GetTodayTodos)
 
 	app.Listen(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }
