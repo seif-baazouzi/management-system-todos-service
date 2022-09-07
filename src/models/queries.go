@@ -1,6 +1,10 @@
 package models
 
-import "todos-service/src/db"
+import (
+	"todos-service/src/db"
+
+	"github.com/google/uuid"
+)
 
 func GetTodos(workspaceID string, startingDate string, endingDate string) ([]Todo, error) {
 	conn := db.GetPool()
@@ -29,4 +33,27 @@ func GetTodos(workspaceID string, startingDate string, endingDate string) ([]Tod
 	}
 
 	return todos, nil
+}
+
+func CreateTodo(todo TodoBody, workspaceID string, userID string) (string, error) {
+	conn := db.GetPool()
+	defer db.ClosePool(conn)
+
+	todoID := uuid.New()
+
+	_, err := conn.Exec(
+		"INSERT INTO todos (todoID, title, body, done, workspaceID, userID) VALUES ($1, $2, $3, $4, $5, $6)",
+		todoID,
+		todo.Title,
+		todo.Body,
+		todo.Done,
+		workspaceID,
+		userID,
+	)
+
+	if err != nil {
+		return "", err
+	}
+
+	return todoID.String(), nil
 }

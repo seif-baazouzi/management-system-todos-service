@@ -14,7 +14,7 @@ def testEmptyFields():
 
 def testNotExistingWorkspace():
     res = testRoute(POST, f"{config.server}/api/v1/todos/{utils.genUUID()}", headers={ "X-Token": config.token })
-    return res.status == 500
+    return res.status == 400
 
 def testCreateTodo():
     workspaceID = utils.createWorkspace()

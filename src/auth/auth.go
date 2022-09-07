@@ -50,6 +50,8 @@ func IsWorkspaceOwner(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"message": "invalid-token"})
 	}
 
-	c.Locals("uuid", body["userID"])
+	workspace := body["workspace"].(map[string]interface{})
+
+	c.Locals("uuid", workspace["userID"])
 	return c.Next()
 }
