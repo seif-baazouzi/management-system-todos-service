@@ -96,3 +96,20 @@ func UpdateTodo(todo TodoBody, todoID string, userID string) error {
 
 	return nil
 }
+
+func DeleteTodo(todoID string, userID string) error {
+	conn := db.GetPool()
+	defer db.ClosePool(conn)
+
+	_, err := conn.Exec(
+		"DELETE FROM todos WHERE todoID = $1 AND userID = $2",
+		todoID,
+		userID,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
