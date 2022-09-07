@@ -24,6 +24,7 @@ func main() {
 	}))
 
 	app.Get("/api/v1/todos/:workspaceID/today", auth.IsWorkspaceOwner, handlers.GetTodayTodos)
+	app.Post("/api/v1/todos/:workspaceID", auth.IsWorkspaceOwner, handlers.CreateTodo)
 
 	app.Listen(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }

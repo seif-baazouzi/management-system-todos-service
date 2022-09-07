@@ -10,6 +10,7 @@ def testToken():
 def testGetTodayTodos():
     workspaceID = utils.createWorkspace()
     res = testRoute(GET, f"{config.server}/api/v1/todos/{workspaceID}/today", headers={ "X-Token": config.token })
+    print(res.body)
     return res.hasKeys("todos")
 
 tests = [
