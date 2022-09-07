@@ -21,3 +21,13 @@ def createWorkspace():
     workspaceID = False if "workspaceID" not in res.body else res.body["workspaceID"]
 
     return workspaceID
+
+def createTodo():
+    workspaceID = createWorkspace()
+
+    body = { "title": randomString(10) }
+    res = testRoute(POST, f"{config.server}/api/v1/todos/{workspaceID}", headers={ "X-Token": config.token }, body=body)
+    
+    todoID = False if "todoID" not in res.body else res.body["todoID"]
+
+    return todoID
