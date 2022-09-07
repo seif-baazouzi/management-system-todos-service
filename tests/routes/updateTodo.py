@@ -15,6 +15,7 @@ def testEmptyFields():
 
 def testNotExistingTodo():
     res = testRoute(PUT, f"{config.server}/api/v1/todos/{utils.genUUID()}", headers={ "X-Token": config.token })
+    print(res.body)
     return res.status == 404
 
 def testUpdateTodo():
