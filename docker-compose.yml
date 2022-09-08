@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  api:
+    build: .
+    ports:
+      - 3002:3000
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DB_USER: "postgres"
+      DB_PASSWORD: "password"
+      DB_HOST: "db"
+      DB_NAME: "todos"
+      PORT: "3000"    
+      ACCOUNTS_SERVICE: "http://127.0.0.1:3000"
+      WORKSPACES_SERVICE: "http://127.0.0.1:3001"
+
+  db:
+    build: database
+    environment:
+      POSTGRES_PASSWORD: "password"
