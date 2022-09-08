@@ -1,22 +1,25 @@
 package models
 
 import (
+	"fmt"
+	"time"
 	"todos-service/src/db"
 
 	"github.com/google/uuid"
 )
 
-func GetTodos(workspaceID string, startingDate string, endingDate string) ([]Todo, error) {
+func GetTodayTodos(userID string) ([]Todo, error) {
 	conn := db.GetPool()
 	defer db.ClosePool(conn)
 
 	var todos []Todo
+	date := time.Now()
+	today := fmt.Sprintf("%d-%d-%d", date.Year(), date.Month(), date.Day())
 
 	rows, err := conn.Query(
-		"SELECT todoID, title, body, done, userID, workspaceID, createdAt FROM todos WHERE workspaceID = $1 AND createdAt between $2 AND $3",
-		workspaceID,
-		startingDate,
-		endingDate,
+		"SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos WHERE userID = $1 AND startingDate >= $2 AND endingDate <= $2",
+		userID,
+		today,
 	)
 
 	if err != nil {
@@ -27,12 +30,13 @@ func GetTodos(workspaceID string, startingDate string, endingDate string) ([]Tod
 
 	for rows.Next() {
 		var todo Todo
-		rows.Scan(&todo.TodoID, &todo.Title, &todo.Body, &todo.Done, &todo.UserID, &todo.WorkspaceID, &todo.CreatedAt)
+		rows.Scan(&todo.TodoID, &todo.Title, &todo.Body, &todo.Done, &todo.StartingDate, &todo.EndingDate, &todo.UserID, &todo.WorkspaceID, &todo.CreatedAt)
 
 		todos = append(todos, todo)
 	}
 
 	return todos, nil
+
 }
 
 func IsTodoExist(todoID string, userID string) (bool, error) {
@@ -61,11 +65,13 @@ func CreateTodo(todo TodoBody, workspaceID string, userID string) (string, error
 	todoID := uuid.New()
 
 	_, err := conn.Exec(
-		"INSERT INTO todos (todoID, title, body, done, workspaceID, userID) VALUES ($1, $2, $3, $4, $5, $6)",
+		"INSERT INTO todos (todoID, title, body, done, startingDate, endingDate, workspaceID, userID) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
 		todoID,
 		todo.Title,
 		todo.Body,
 		todo.Done,
+		todo.StartingDate,
+		todo.EndingDate,
 		workspaceID,
 		userID,
 	)

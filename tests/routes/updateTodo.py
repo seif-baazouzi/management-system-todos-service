@@ -15,13 +15,12 @@ def testEmptyFields():
 
 def testNotExistingTodo():
     res = testRoute(PUT, f"{config.server}/api/v1/todos/{utils.genUUID()}", headers={ "X-Token": config.token })
-    print(res.body)
     return res.status == 404
 
 def testUpdateTodo():
     todoID = utils.createTodo()
-    body = { "title": utils.randomString(10), "body": utils.randomString(50), "done": True }
-
+    body = { "title": utils.randomString(10), "body": utils.randomString(50), "done": True, "startingDate": utils.today() }
+    
     res = testRoute(PUT, f"{config.server}/api/v1/todos/{todoID}", headers={ "X-Token": config.token }, body=body)
     return res.equals({ "message": "success"})
 

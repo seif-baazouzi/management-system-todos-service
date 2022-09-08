@@ -1,6 +1,7 @@
 import uuid
 import string
 import random
+import datetime
 
 import config
 from testRestApi import testRoute, POST
@@ -11,6 +12,9 @@ def randomString(length):
 def genUUID():
     return str(uuid.uuid4())
     
+def today():
+    return datetime.datetime.utcnow().isoformat("T") + "Z"
+
 def createWorkspace():
     workspace = randomString(10)
     parentWorkspace = None
@@ -25,7 +29,7 @@ def createWorkspace():
 def createTodo():
     workspaceID = createWorkspace()
 
-    body = { "title": randomString(10) }
+    body = { "title": randomString(10), "startingDate": today() }
     res = testRoute(POST, f"{config.server}/api/v1/todos/{workspaceID}", headers={ "X-Token": config.token }, body=body)
     
     todoID = False if "todoID" not in res.body else res.body["todoID"]

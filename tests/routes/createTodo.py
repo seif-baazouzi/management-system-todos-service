@@ -18,7 +18,7 @@ def testNotExistingWorkspace():
 
 def testCreateTodo():
     workspaceID = utils.createWorkspace()
-    body = { "title": utils.randomString(10), "body": utils.randomString(50) }
+    body = { "title": utils.randomString(10), "body": utils.randomString(50), "startingDate": utils.today() }
 
     res = testRoute(POST, f"{config.server}/api/v1/todos/{workspaceID}", headers={ "X-Token": config.token }, body=body)
     return res.equals({ "message": "success"})

@@ -7,6 +7,8 @@ CREATE TABLE todos (
     title VARCHAR NOT NULL, 
     body VARCHAR NOT NULL, 
     done BOOLEAN NOT NULL,
+    startingDate TIMESTAMP NOT NULL,
+    endingDate TIMESTAMP,
     userID UUID NOT NULL,
     workspaceID UUID NOT NULL,
     createdAt TIMESTAMP DEFAULT NOW() 

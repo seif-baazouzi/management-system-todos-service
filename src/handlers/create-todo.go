@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"todos-service/src/checks"
 	"todos-service/src/models"
 	"todos-service/src/utils"
 
@@ -21,9 +22,11 @@ func CreateTodo(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"message": "invalid-input"})
 	}
 
-	// check values
-	if body.Title == "" {
-		return c.JSON(fiber.Map{"title": "Must not be empty"})
+	// check body
+	errors := checks.CheckTodo(body)
+
+	if errors != nil {
+		return c.JSON(errors)
 	}
 
 	// create todo
