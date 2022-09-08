@@ -24,6 +24,7 @@ func main() {
 	}))
 
 	app.Get("/api/v1/todos/:workspaceID/today", auth.IsWorkspaceOwner, handlers.GetTodayTodos)
+	app.Get("/api/v1/todos/:workspaceID/month/:month", auth.IsWorkspaceOwner, handlers.GetMonthTodos)
 	app.Post("/api/v1/todos/:workspaceID", auth.IsWorkspaceOwner, handlers.CreateTodo)
 	app.Put("/api/v1/todos/:todoID", auth.IsLogin, handlers.UpdateTodo)
 	app.Delete("/api/v1/todos/:todoID", auth.IsLogin, handlers.DeleteTodo)

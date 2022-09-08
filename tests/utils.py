@@ -15,6 +15,9 @@ def genUUID():
 def today():
     return datetime.datetime.utcnow().isoformat("T") + "Z"
 
+def month():
+    return today()[:7]
+
 def createWorkspace():
     workspace = randomString(10)
     parentWorkspace = None
