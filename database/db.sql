@@ -15,4 +15,4 @@ CREATE TABLE todos (
 );
 
 CREATE INDEX UserIdInex ON todos USING hash (userID);
-CREATE INDEX WorkspaceInex ON todos USING hash (workspace);
+CREATE INDEX WorkspaceInex ON todos USING hash (workspaceID);
