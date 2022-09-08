@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"time"
 	"todos-service/src/models"
 	"todos-service/src/utils"
 
@@ -11,7 +12,10 @@ import (
 func GetTodayTodos(c *fiber.Ctx) error {
 	userID := fmt.Sprintf("%s", c.Locals("uuid"))
 
-	todos, err := models.GetTodayTodos(userID)
+	date := time.Now()
+	today := fmt.Sprintf("%d-%d-%d", date.Year(), date.Month(), date.Day())
+
+	todos, err := models.GetTodos(userID, today)
 
 	if err != nil {
 		return utils.ServerError(c, err)

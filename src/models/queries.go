@@ -1,26 +1,40 @@
 package models
 
 import (
-	"fmt"
-	"time"
+	"database/sql"
 	"todos-service/src/db"
 
 	"github.com/google/uuid"
 )
 
-func GetTodayTodos(userID string) ([]Todo, error) {
+func GetTodos(userID string, date string, workspace ...string) ([]Todo, error) {
+	workspaceID := ""
+	if len(workspace) > 0 {
+		workspaceID = workspace[0]
+	}
+
 	conn := db.GetPool()
 	defer db.ClosePool(conn)
 
 	var todos []Todo
-	date := time.Now()
-	today := fmt.Sprintf("%d-%d-%d", date.Year(), date.Month(), date.Day())
 
-	rows, err := conn.Query(
-		"SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos WHERE userID = $1 AND startingDate >= $2 AND endingDate <= $2",
-		userID,
-		today,
-	)
+	var rows *sql.Rows
+	var err error
+
+	if workspaceID != "" {
+		rows, err = conn.Query(
+			"SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos WHERE userID = $1 AND startingDate >= $2 AND endingDate <= $2 AND workspaceID = $3",
+			userID,
+			date,
+			workspaceID,
+		)
+	} else {
+		rows, err = conn.Query(
+			"SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos WHERE userID = $1 AND startingDate >= $2 AND endingDate <= $2",
+			userID,
+			date,
+		)
+	}
 
 	if err != nil {
 		return todos, err

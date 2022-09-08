@@ -10,7 +10,6 @@ def testToken():
 def testEmptyFields():
     todoID = utils.createTodo()
     res = testRoute(PUT, f"{config.server}/api/v1/todos/{todoID}", headers={ "X-Token": config.token })
-    print(res.body)
     return res.equals({ "title": "Must not be empty" })
 
 def testNotExistingTodo():
