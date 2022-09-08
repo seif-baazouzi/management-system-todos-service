@@ -88,10 +88,12 @@ func UpdateTodo(todo TodoBody, todoID string, userID string) error {
 	defer db.ClosePool(conn)
 
 	_, err := conn.Exec(
-		"UPDATE todos SET title = $1, body = $2, done = $3 WHERE todoID = $4 AND userID = $5",
+		"UPDATE todos SET title = $1, body = $2, done = $3, startingDate = $4, endingDate = $5 WHERE todoID = $6 AND userID = $7",
 		todo.Title,
 		todo.Body,
 		todo.Done,
+		todo.StartingDate,
+		todo.EndingDate,
 		todoID,
 		userID,
 	)
