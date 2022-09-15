@@ -23,14 +23,20 @@ func GetTodos(userID string, date string, workspace ...string) ([]Todo, error) {
 
 	if workspaceID != "" {
 		rows, err = conn.Query(
-			"SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos WHERE userID = $1 AND startingDate >= $2 AND endingDate <= $2 AND workspaceID = $3",
+			`SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos
+			WHERE userID = $1 AND workspaceID = $3
+			AND (endingDate = '0001-01-01' AND startingDate = $2)
+			OR (endingDate <> '0001-01-01' AND startingDate <= $2 AND endingDate >= $2)`,
 			userID,
 			date,
 			workspaceID,
 		)
 	} else {
 		rows, err = conn.Query(
-			"SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos WHERE userID = $1 AND startingDate >= $2 AND endingDate <= $2",
+			`SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos
+			WHERE userID = $1
+			AND (endingDate = '0001-01-01' AND startingDate = $2)
+			OR (endingDate <> '0001-01-01' AND startingDate <= $2 AND endingDate >= $2)`,
 			userID,
 			date,
 		)
