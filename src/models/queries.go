@@ -26,7 +26,8 @@ func GetTodos(userID string, date string, workspace ...string) ([]Todo, error) {
 			`SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos
 			WHERE userID = $1 AND workspaceID = $3
 			AND (endingDate = '0001-01-01' AND startingDate = $2)
-			OR (endingDate <> '0001-01-01' AND startingDate <= $2 AND endingDate >= $2)`,
+			OR (endingDate <> '0001-01-01' AND startingDate <= $2 AND endingDate >= $2)
+			ORDER BY createdAt`,
 			userID,
 			date,
 			workspaceID,
@@ -36,7 +37,8 @@ func GetTodos(userID string, date string, workspace ...string) ([]Todo, error) {
 			`SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos
 			WHERE userID = $1
 			AND (endingDate = '0001-01-01' AND startingDate = $2)
-			OR (endingDate <> '0001-01-01' AND startingDate <= $2 AND endingDate >= $2)`,
+			OR (endingDate <> '0001-01-01' AND startingDate <= $2 AND endingDate >= $2)
+			ORDER BY createdAt`,
 			userID,
 			date,
 		)
