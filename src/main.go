@@ -28,6 +28,7 @@ func main() {
 	app.Post("/api/v1/todos/:workspaceID", auth.IsWorkspaceOwner, handlers.CreateTodo)
 	app.Put("/api/v1/todos/:todoID", auth.IsLogin, handlers.UpdateTodo)
 	app.Delete("/api/v1/todos/:todoID", auth.IsLogin, handlers.DeleteTodo)
+	app.Delete("/api/v1/todos/workspace/:workspaceID", auth.IsWorkspaceOwner, handlers.DeleteWorkspaceTodos)
 
 	app.Listen(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }
