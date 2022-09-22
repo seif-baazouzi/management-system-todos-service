@@ -1,4 +1,4 @@
-# Management System Accounts Service
+# Management System Todos Service
 
 This is the todos service for my management system.
 
