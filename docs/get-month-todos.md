@@ -1,4 +1,4 @@
-# Get Today Todos
+# Get Month Todos
 
 Used to get user todos for specified month.
 

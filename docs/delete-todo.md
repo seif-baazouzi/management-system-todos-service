@@ -1,8 +1,8 @@
-# Delete Workspace
+# Delete Todo
 
 Used to delete todo.
 
-**URL**: `/api/v1/todos/:todos`
+**URL**: `/api/v1/todos/:todoID`
 
 **Method**: `DELETE`
 
