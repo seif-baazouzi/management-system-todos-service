@@ -1,6 +1,7 @@
 from testRestApi import runTests
 
 import routes.getTodayTodos as getTodayTodos
+import routes.getRemainingTodos as getRemainingTodos
 import routes.getMonthTodos as getMonthTodos
 import routes.createTodo as createTodo
 import routes.updateTodo as updateTodo
@@ -10,6 +11,7 @@ import routes.deleteWorkspaceTodos as deleteWorkspaceTodos
 if __name__ == "__main__":
     runTests([
         *getTodayTodos.tests,
+        *getRemainingTodos.tests,
         *getMonthTodos.tests,
         *createTodo.tests,
         *updateTodo.tests,

@@ -8,10 +8,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetTodayTodos(c *fiber.Ctx) error {
+func GetRemainingTodos(c *fiber.Ctx) error {
 	userID := fmt.Sprintf("%s", c.Locals("uuid"))
 
-	todos, err := models.GetTodayTodos(userID)
+	todos, err := models.GetRemainingTodos(userID)
 
 	if err != nil {
 		return utils.ServerError(c, err)

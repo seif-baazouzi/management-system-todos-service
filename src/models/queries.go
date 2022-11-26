@@ -1,48 +1,29 @@
 package models
 
 import (
-	"database/sql"
+	"fmt"
+	"time"
 	"todos-service/src/db"
 
 	"github.com/google/uuid"
 )
 
-func GetTodos(userID string, date string, workspace ...string) ([]Todo, error) {
-	workspaceID := ""
-	if len(workspace) > 0 {
-		workspaceID = workspace[0]
-	}
-
+func GetTodos(userID string, date string, workspaceID string) ([]Todo, error) {
 	conn := db.GetPool()
 	defer db.ClosePool(conn)
 
 	var todos []Todo
 
-	var rows *sql.Rows
-	var err error
-
-	if workspaceID != "" {
-		rows, err = conn.Query(
-			`SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos
+	rows, err := conn.Query(
+		`SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos
 			WHERE userID = $1 AND workspaceID = $3
 			AND (endingDate = '0001-01-01' AND startingDate = $2)
 			OR (endingDate <> '0001-01-01' AND startingDate <= $2 AND endingDate >= $2)
 			ORDER BY createdAt`,
-			userID,
-			date,
-			workspaceID,
-		)
-	} else {
-		rows, err = conn.Query(
-			`SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos
-			WHERE userID = $1
-			AND (endingDate = '0001-01-01' AND startingDate = $2)
-			OR (endingDate <> '0001-01-01' AND startingDate <= $2 AND endingDate >= $2)
-			ORDER BY createdAt`,
-			userID,
-			date,
-		)
-	}
+		userID,
+		date,
+		workspaceID,
+	)
 
 	if err != nil {
 		return todos, err
@@ -58,7 +39,77 @@ func GetTodos(userID string, date string, workspace ...string) ([]Todo, error) {
 	}
 
 	return todos, nil
+}
 
+func GetTodayTodos(userID string) ([]Todo, error) {
+	date := time.Now()
+	today := fmt.Sprintf("%d-%d-%d", date.Year(), date.Month(), date.Day())
+
+	conn := db.GetPool()
+	defer db.ClosePool(conn)
+
+	var todos []Todo
+
+	rows, err := conn.Query(
+		`SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos
+			WHERE userID = $1
+			AND (endingDate = '0001-01-01' AND startingDate = $2)
+			OR (endingDate <> '0001-01-01' AND startingDate <= $2 AND endingDate >= $2)
+			ORDER BY createdAt`,
+		userID,
+		today,
+	)
+
+	if err != nil {
+		return todos, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var todo Todo
+		rows.Scan(&todo.TodoID, &todo.Title, &todo.Body, &todo.Done, &todo.StartingDate, &todo.EndingDate, &todo.UserID, &todo.WorkspaceID, &todo.CreatedAt)
+
+		todos = append(todos, todo)
+	}
+
+	return todos, nil
+}
+
+func GetRemainingTodos(userID string) ([]Todo, error) {
+	date := time.Now().AddDate(0, 0, -1)
+	yesterday := fmt.Sprintf("%d-%d-%d", date.Year(), date.Month(), date.Day())
+
+	conn := db.GetPool()
+	defer db.ClosePool(conn)
+
+	var todos []Todo
+
+	rows, err := conn.Query(
+		`SELECT todoID, title, body, done, startingDate, endingDate, userID, workspaceID, createdAt FROM todos
+			WHERE userID = $1
+			AND done = FALSE
+			AND (endingDate = '0001-01-01' AND startingDate < $2)
+			OR (endingDate <> '0001-01-01' AND endingDate < $2)
+			ORDER BY createdAt`,
+		userID,
+		yesterday,
+	)
+
+	if err != nil {
+		return todos, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var todo Todo
+		rows.Scan(&todo.TodoID, &todo.Title, &todo.Body, &todo.Done, &todo.StartingDate, &todo.EndingDate, &todo.UserID, &todo.WorkspaceID, &todo.CreatedAt)
+
+		todos = append(todos, todo)
+	}
+
+	return todos, nil
 }
 
 func IsTodoExist(todoID string, userID string) (bool, error) {
